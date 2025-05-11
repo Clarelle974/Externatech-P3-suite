@@ -53,7 +53,11 @@ router.put(
   formCompany.validateUpdate,
   companyActions.edit,
 );
-router.delete("/api/companies/:id", companyActions.destroy);
+router.delete(
+  "/api/companies",
+  authActions.verifyCompany,
+  companyActions.destroy,
+);
 
 /* CANDIDATES ************************************************************************* */
 
@@ -82,6 +86,7 @@ router.get(
   offerActions.browseByCompany,
 );
 router.get("/api/offers/:id", offerActions.read);
+
 router.post(
   "/api/offers",
   authActions.verifyCompany,
@@ -113,10 +118,10 @@ router.get(
   authActions.verifyCompany,
   candidateOfferActions.browseCandidatesByOffer,
 );
-router.put(
-  "/api/candidates_offers",
-  authActions.verifyCompany,
-  candidateOfferActions.editStatus,
+router.get(
+  "/api/candidates_offers/candidates",
+  authActions.verifyCandidate,
+  candidateOfferActions.browseCandidatesOffersByCandidate,
 );
 router.post(
   "/api/candidates_offers",
@@ -125,10 +130,10 @@ router.post(
   formApply.validate,
   candidateOfferActions.add,
 );
-router.get(
-  "/api/candidates_offers/candidates",
-  authActions.verifyCandidate,
-  candidateOfferActions.browseCandidatesOffersByCandidate,
+router.put(
+  "/api/candidates_offers",
+  authActions.verifyCompany,
+  candidateOfferActions.editStatus,
 );
 
 /* STACK ************************************************************************* */

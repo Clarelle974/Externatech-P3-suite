@@ -9,7 +9,6 @@ export default function CandidateCard({ candidateOffer }: CandidateOfferProps) {
     const updateStatus = {
       application_status_id: status,
       id: candidateOffer.id,
-      candidate_id: candidateOffer.candidate_id,
     };
     axios
       .put(
@@ -23,7 +22,7 @@ export default function CandidateCard({ candidateOffer }: CandidateOfferProps) {
         revalidate();
       })
       .catch((error) => {
-        console.error("Erreur lors du changement de :", error);
+        console.error("Erreur lors du changement de statut :", error);
       });
   };
 

@@ -202,7 +202,7 @@ describe("DELETE /api/offers/:id", () => {
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    const response = await supertest(app).delete("/api/items/43");
+    const response = await supertest(app).delete("/api/offers/43");
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({});

@@ -71,7 +71,7 @@ const add: RequestHandler = async (req, res, next) => {
 
 const destroy: RequestHandler = async (req, res, next) => {
   try {
-    const companyId = Number(req.params.id);
+    const companyId = req.company.id;
 
     await companyRepository.delete(companyId);
 

@@ -27,7 +27,7 @@ function CompanyApplies() {
     <main className="no-offer">
       <p>Pas de candidature en cours pour :</p>
       <h2>{offer.title}</h2>
-      <OfferCard key={offer.id} offer={offer} editable={true} />
+      <OfferCard offer={offer} editable={true} />
     </main>
   );
 }

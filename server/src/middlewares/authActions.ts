@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 import type { RequestHandler } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError, JsonWebTokenError } from "jsonwebtoken";
 
 import candidateRepository from "../modules/candidate/candidateRepository";
 import companyRepository from "../modules/company/companyRepository";
@@ -53,7 +53,7 @@ const login: RequestHandler = async (req, res, next) => {
       }
 
       const token = await jwt.sign(payload, process.env.APP_SECRET, {
-        expiresIn: "1y",
+        expiresIn: "1h",
       });
       res.cookie("auth", token).send({
         message: "Utilisateur connecté",
@@ -96,6 +96,49 @@ const hashPassword: RequestHandler = async (req, res, next) => {
   }
 };
 
+// const verifyCompany: RequestHandler = (req, res, next) => {
+//   if (!process.env.APP_SECRET) {
+//     throw new Error("Vous n'avez pas configuré votre APP SECRET dans le .env");
+//   }
+
+//   try {
+//     const { auth } = req.cookies;
+
+//     if (!auth) {
+//       res.sendStatus(401);
+//       return;
+//     }
+
+//     const resultPayload = jwt.verify(auth, process.env.APP_SECRET);
+
+//     if (typeof resultPayload !== "object" || !("role" in resultPayload)) {
+//       res.status(401).json({ error: "Token invalide" });
+//       return;
+//     }
+
+//     if (resultPayload.role !== "company") {
+//       res.sendStatus(403);
+//       return;
+//     }
+
+//     req.company = { id: resultPayload.id };
+//     next();
+//   } catch (error) {
+//     if (error instanceof TokenExpiredError) {
+//       res
+//         .status(401)
+//         .json({ error: "Session expirée, veuillez vous reconnecter." });
+//       return;
+//     }
+
+//     if (error instanceof JsonWebTokenError) {
+//       res.status(401).json({ error: "Token invalide." });
+//       return;
+//     }
+
+//     next(error);
+//   }
+// };
 const verifyCompany: RequestHandler = async (req, res, next) => {
   if (!process.env.APP_SECRET) {
     throw new Error("Vous n'avez pas configuré votre APP SECRET dans le .env");
@@ -119,6 +162,18 @@ const verifyCompany: RequestHandler = async (req, res, next) => {
 
     next();
   } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      res
+        .status(401)
+        .json({ error: "Session expirée, veuillez vous reconnecter." });
+      return;
+    }
+
+    if (error instanceof JsonWebTokenError) {
+      res.status(401).json({ error: "Token invalide." });
+      return;
+    }
+
     next(error);
   }
 };
