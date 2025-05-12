@@ -4,21 +4,17 @@ import Joi from "joi";
 
 const applySchema = Joi.object({
   offer_id: Joi.number().integer().positive().required().messages({
-    "number.base": "L'offre doit être selectionnée.",
-    "number.integer": "L'offre doit être selectionnée.",
-    "number.positive": "L'offre doit être selectionnée.",
-    "any.required": "L'offre doit être selectionnée",
+    "number.base": "L'offre doit être sélectionnée.",
+    "number.integer": "L'offre doit être sélectionnée.",
+    "number.positive": "L'offre doit être sélectionnée.",
+    "any.required": "L'offre doit être sélectionnée",
   }),
   resume: Joi.any()
     .required()
     .custom((value, helpers) => {
-      if (!value) {
-        return helpers.error("any.required");
-      }
+      if (!value) return helpers.error("any.required");
       const fileExtension = extname(value.originalname).toLowerCase();
-      if (fileExtension !== ".pdf") {
-        return helpers.error("any.invalid");
-      }
+      if (fileExtension !== ".pdf") return helpers.error("any.invalid");
       return value;
     })
     .messages({
@@ -26,6 +22,7 @@ const applySchema = Joi.object({
       "any.invalid": "Le CV doit être au format PDF.",
     }),
 });
+
 const validate: RequestHandler = (req, res, next) => {
   const { offer_id } = req.body;
   const { file } = req;
@@ -33,9 +30,10 @@ const validate: RequestHandler = (req, res, next) => {
 
   if (validation.error) {
     res.status(400).json({ error: validation.error.details[0].message });
-  } else {
-    next();
+    return; // <- on sort de la fonction sans `return res...`
   }
+
+  next();
 };
 
 export default { validate };

@@ -1,7 +1,5 @@
-import type { RequestHandler } from "express";
-
 import { randomUUID } from "node:crypto";
-
+import type { RequestHandler } from "express";
 import multer from "multer";
 
 const storage = multer.diskStorage({
@@ -13,17 +11,22 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploadFile: RequestHandler = (req, res, next) => {
-  try {
-    const randomId = randomUUID();
-    console.info(randomId);
-
-    const upload = multer({ storage });
-
-    return upload.single("resume")(req, res, next);
-  } catch (error) {
-    next(error);
+const fileFilter = (
+  req: Express.Request,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
+  const allowedMimeTypes = ["application/pdf"];
+  if (!allowedMimeTypes.includes(file.mimetype)) {
+    return cb(new Error("Le fichier doit être au format PDF."));
   }
+  cb(null, true);
+};
+
+const upload = multer({ storage, fileFilter });
+
+const uploadFile: RequestHandler = (req, res, next) => {
+  return upload.single("resume")(req, res, next);
 };
 
 export default { uploadFile };
