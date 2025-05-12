@@ -1,14 +1,31 @@
+import { extname } from "node:path";
 import type { RequestHandler } from "express";
 import Joi from "joi";
+
+const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
 
 const companySchema = Joi.object({
   name: Joi.string().max(100).required().messages({
     "any.required": "Le nom est obligatoire",
     "string.empty": "Le champ ne peut pas être vide",
   }),
-  logo: Joi.any().required().messages({
-    "any.required": "Le champ logo est obligatoire",
-  }),
+  logo: Joi.any()
+    .required()
+    .custom((value, helpers) => {
+      if (!value || !value.originalname) {
+        return helpers.error("any.required");
+      }
+      const fileExtension = extname(value.originalname).toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        return helpers.error("any.invalid");
+      }
+      return value;
+    })
+    .messages({
+      "any.required": "Le logo est obligatoire.",
+      "any.invalid":
+        "Le fichier doit être une image au format jpg, jpeg, png, gif ou webp.",
+    }),
   description: Joi.string().required().messages({
     "any.required": "Ce champ est obligatoire",
     "string.empty": "Le champ ne peut pas être vide",
@@ -45,13 +62,17 @@ const companySchema = Joi.object({
 });
 
 const validate: RequestHandler = (req, res, next) => {
-  const { error } = companySchema.validate(req.body);
-  if (error) {
-    res.status(400).json({ error: error.details[0].message });
-    return;
-  }
+  const dataToValidate = {
+    ...req.body,
+    logo: req.file,
+  };
 
-  next();
+  const validation = companySchema.validate(dataToValidate);
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details[0].message });
+  } else {
+    next();
+  }
 };
 
 const companyUpdateSchema = Joi.object({
