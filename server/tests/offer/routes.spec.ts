@@ -1,12 +1,10 @@
-import jwt from "jsonwebtoken";
 import supertest from "supertest";
-import databaseClient from "../../database/client";
-import type { Result, Rows } from "../../database/client";
+
 import app from "../../src/app";
 
-process.env.APP_SECRET = "super_secret_test_key";
-const getToken = () =>
-  jwt.sign({ id: 1, email: "test@mail.com", role: "company" }, "test_secret");
+import databaseClient from "../../database/client";
+
+import type { Result, Rows } from "../../database/client";
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -71,13 +69,11 @@ describe("POST /api/offers", () => {
       salary: 1000000,
       profile: "junior wcs avec 12 ans d'XP pour un stage payant",
       work_condition_id: 1,
+      company_id: 1,
       contract_id: 2,
     };
 
-    const response = await supertest(app)
-      .post("/api/offers")
-      .set("Cookie", `auth=${getToken()}`)
-      .send(fakeOffer);
+    const response = await supertest(app).post("/api/offers").send(fakeOffer);
 
     expect(response.status).toBe(201);
     expect(response.body).toBeInstanceOf(Object);
@@ -107,108 +103,108 @@ describe("POST /api/offers", () => {
   });
 });
 
-// describe("PUT /api/offers/:id", () => {
-//   it("should update an existing item successfully", async () => {
-//     const result = { affectedRows: 1 } as Result;
+describe("PUT /api/offers/:id", () => {
+  it("should update an existing item successfully", async () => {
+    const result = { affectedRows: 1 } as Result;
 
-//     jest
-//       .spyOn(databaseClient, "query")
-//       .mockImplementation(async () => [result, []]);
+    jest
+      .spyOn(databaseClient, "query")
+      .mockImplementation(async () => [result, []]);
 
-//     const fakeOffer = {
-//       id: 1,
-//       title: "foo",
-//       city: "paris",
-//       background: "http://blabla.com",
-//       description: "il fait beau",
-//       salary: 1000000,
-//       profile: "junior wcs avec 12 ans d'XP pour un stage payant",
-//       work_condition_id: 1,
-//       company_id: 1,
-//       contract_id: 2,
-//     };
-//     const response = await supertest(app).put("/api/offers/1").send(fakeOffer);
+    const fakeOffer = {
+      id: 1,
+      title: "foo",
+      city: "paris",
+      background: "http://blabla.com",
+      description: "il fait beau",
+      salary: 1000000,
+      profile: "junior wcs avec 12 ans d'XP pour un stage payant",
+      work_condition_id: 1,
+      company_id: 1,
+      contract_id: 2,
+    };
+    const response = await supertest(app).put("/api/offers/1").send(fakeOffer);
 
-//     expect(response.status).toBe(204);
-//     expect(response.body).toEqual({});
-//   });
+    expect(response.status).toBe(204);
+    expect(response.body).toEqual({});
+  });
 
-//   it("should fail on invalid request body", async () => {
-//     const result = { affectedRows: 1 } as Result;
+  it("should fail on invalid request body", async () => {
+    const result = { affectedRows: 1 } as Result;
 
-//     jest
-//       .spyOn(databaseClient, "query")
-//       .mockImplementation(async () => [result, []]);
+    jest
+      .spyOn(databaseClient, "query")
+      .mockImplementation(async () => [result, []]);
 
-//     const fakeOffer = {
-//       id: 1,
-//       title: "foo",
-//       city: "paris",
-//       background: "http://blabla.com",
-//       description: "",
-//       salary: "ghkhgcj",
-//       profile: "junior wcs avec 12 ans d'XP pour un stage payant",
-//       work_condition_id: 1,
-//       company_id: "bloublou",
-//       contract_id: 2,
-//     };
-//     const response = await supertest(app).put("/api/offers/1").send(fakeOffer);
+    const fakeOffer = {
+      id: 1,
+      title: "foo",
+      city: "paris",
+      background: "http://blabla.com",
+      description: "",
+      salary: "ghkhgcj",
+      profile: "junior wcs avec 12 ans d'XP pour un stage payant",
+      work_condition_id: 1,
+      company_id: "bloublou",
+      contract_id: 2,
+    };
+    const response = await supertest(app).put("/api/offers/1").send(fakeOffer);
 
-//     expect(response.status).toBe(400);
-//     expect(response.body).toEqual({});
-//   });
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({});
+  });
 
-//   it("should fail on invalid id", async () => {
-//     const result = { affectedRows: 0 } as Result;
+  it("should fail on invalid id", async () => {
+    const result = { affectedRows: 0 } as Result;
 
-//     jest
-//       .spyOn(databaseClient, "query")
-//       .mockImplementation(async () => [result, []]);
+    jest
+      .spyOn(databaseClient, "query")
+      .mockImplementation(async () => [result, []]);
 
-//     const fakeOffer = {
-//       id: -10,
-//       title: "foo",
-//       city: "paris",
-//       background: "http://blabla.com",
-//       description: "il fait beau",
-//       salary: 1000000,
-//       profile: "junior wcs avec 12 ans d'XP pour un stage payant",
-//       work_condition_id: 1,
-//       company_id: 1,
-//       contract_id: 2,
-//     };
+    const fakeOffer = {
+      id: -10,
+      title: "foo",
+      city: "paris",
+      background: "http://blabla.com",
+      description: "il fait beau",
+      salary: 1000000,
+      profile: "junior wcs avec 12 ans d'XP pour un stage payant",
+      work_condition_id: 1,
+      company_id: 1,
+      contract_id: 2,
+    };
 
-//     const response = await supertest(app).put("/api/offers/1").send(fakeOffer);
+    const response = await supertest(app).put("/api/offers/1").send(fakeOffer);
 
-//     expect(response.status).toBe(404);
-//     expect(response.body).toEqual({});
-//   });
-// });
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({});
+  });
+});
 
-// describe("DELETE /api/offers/:id", () => {
-//   it("should delete an existing offer successfully", async () => {
-//     const result = { affectedRows: 1 } as Result;
+describe("DELETE /api/offers/:id", () => {
+  it("should delete an existing offer successfully", async () => {
+    const result = { affectedRows: 1 } as Result;
 
-//     jest
-//       .spyOn(databaseClient, "query")
-//       .mockImplementation(async () => [result, []]);
+    jest
+      .spyOn(databaseClient, "query")
+      .mockImplementation(async () => [result, []]);
 
-//     const response = await supertest(app).delete("/api/offers/1");
+    const response = await supertest(app).delete("/api/offers/1");
 
-//     expect(response.status).toBe(204);
-//     expect(response.body).toEqual({});
-//   });
+    expect(response.status).toBe(204);
+    expect(response.body).toEqual({});
+  });
 
-//   it("should fail on invalid id", async () => {
-//     const result = { affectedRows: 0 } as Result;
+  it("should fail on invalid id", async () => {
+    const result = { affectedRows: 0 } as Result;
 
-//     jest
-//       .spyOn(databaseClient, "query")
-//       .mockImplementation(async () => [result, []]);
+    jest
+      .spyOn(databaseClient, "query")
+      .mockImplementation(async () => [result, []]);
 
-//     const response = await supertest(app).delete("/api/items/43");
+    const response = await supertest(app).delete("/api/offers/43");
 
-//     expect(response.status).toBe(404);
-//     expect(response.body).toEqual({});
-//   });
-// });
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({});
+  });
+});
