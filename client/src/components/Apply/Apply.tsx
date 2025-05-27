@@ -29,7 +29,7 @@ export default function Apply({ isOpen, onClose }: LoginCompanyProps) {
       );
 
       setErrorMessage("");
-      toast.success("Offre ajoutée avec succès !", {
+      toast.success("Candidature envoyée avec succès !", {
         position: "bottom-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -43,7 +43,7 @@ export default function Apply({ isOpen, onClose }: LoginCompanyProps) {
       });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Erreur lors de la candidature de l'offre :", error);
+        console.error("Erreur lors de l'envoi de la candidature :", error);
         setErrorMessage(error.response?.data.error);
       } else {
         console.error("Une erreur inattendue s'est produite :", error);

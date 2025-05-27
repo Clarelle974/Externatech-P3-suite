@@ -22,12 +22,18 @@ function CompanyApplies() {
           </li>
         ))}
       </ul>
+      <Link to="/companies/dashboard" className="colored-box">
+        RETOUR AU DASHBOARD
+      </Link>
     </main>
   ) : (
     <main className="no-offer">
       <p>Pas de candidature en cours pour :</p>
       <h2>{offer.title}</h2>
       <OfferCard offer={offer} editable={true} />
+      <Link to="/companies/dashboard" className="colored-box">
+        RETOUR AU DASHBOARD
+      </Link>
     </main>
   );
 }
