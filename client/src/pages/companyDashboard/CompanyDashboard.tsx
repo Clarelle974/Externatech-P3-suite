@@ -199,7 +199,7 @@ function CompanyDashboard() {
 
           <p>{company.description}</p>
           <div className="actions">
-            <Link className="colored-box" to="/">
+            <Link className="colored-box" to="/companies/dashboard/information">
               MODIFIER
             </Link>
             <Link className="light-box" to="/companies/dashboard/information">

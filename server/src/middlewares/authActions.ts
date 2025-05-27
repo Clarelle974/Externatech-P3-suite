@@ -96,49 +96,6 @@ const hashPassword: RequestHandler = async (req, res, next) => {
   }
 };
 
-// const verifyCompany: RequestHandler = (req, res, next) => {
-//   if (!process.env.APP_SECRET) {
-//     throw new Error("Vous n'avez pas configuré votre APP SECRET dans le .env");
-//   }
-
-//   try {
-//     const { auth } = req.cookies;
-
-//     if (!auth) {
-//       res.sendStatus(401);
-//       return;
-//     }
-
-//     const resultPayload = jwt.verify(auth, process.env.APP_SECRET);
-
-//     if (typeof resultPayload !== "object" || !("role" in resultPayload)) {
-//       res.status(401).json({ error: "Token invalide" });
-//       return;
-//     }
-
-//     if (resultPayload.role !== "company") {
-//       res.sendStatus(403);
-//       return;
-//     }
-
-//     req.company = { id: resultPayload.id };
-//     next();
-//   } catch (error) {
-//     if (error instanceof TokenExpiredError) {
-//       res
-//         .status(401)
-//         .json({ error: "Session expirée, veuillez vous reconnecter." });
-//       return;
-//     }
-
-//     if (error instanceof JsonWebTokenError) {
-//       res.status(401).json({ error: "Token invalide." });
-//       return;
-//     }
-
-//     next(error);
-//   }
-// };
 const verifyCompany: RequestHandler = async (req, res, next) => {
   if (!process.env.APP_SECRET) {
     throw new Error("Vous n'avez pas configuré votre APP SECRET dans le .env");
