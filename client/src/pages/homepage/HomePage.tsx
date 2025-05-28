@@ -4,11 +4,23 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
+import Login from "../../components/NavBar/Login";
 import OfferCard from "../../components/Offer-card/OfferCard";
 
 export default function HomePage() {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(!isModalOpen);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = "";
+  };
 
   const { companies, offers } = useLoaderData() as {
     companies: CompanyData[];
@@ -75,11 +87,14 @@ export default function HomePage() {
       </section>
       <section className="greyBlock">
         <h2 className="why-join-us">Pourquoi nous rejoindre ?</h2>
-        <Link to="/seconnecter">
-          <button className="colored-box-homepage-business" type="button">
-            N'attendez plus
-          </button>
-        </Link>
+        <Login isOpen={isModalOpen} onClose={closeModal} />
+        <button
+          type="button"
+          className="colored-box-homepage-business"
+          onClick={openModal}
+        >
+          N'attendez plus
+        </button>
       </section>
       <section className="home-page-companies">
         <div className="title-homePage">

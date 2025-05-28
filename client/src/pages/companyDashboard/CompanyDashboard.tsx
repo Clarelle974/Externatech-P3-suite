@@ -80,15 +80,18 @@ function CompanyDashboard() {
       if (axios.isAxiosError(error)) {
         console.error("Erreur lors de l'ajout de l'offre :", error);
         setErrorMessage(error.response?.data.error);
-        toast.error("Erreur lors de l'ajout de l'offre !", {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-          transition: Bounce,
-        });
+        toast.error(
+          `Erreur lors de l'ajout de l'offre ! ${error.response?.data.error}`,
+          {
+            position: "bottom-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+            transition: Bounce,
+          },
+        );
       } else {
         console.error("Une erreur inattendue s'est produite :", error);
         setErrorMessage("Une erreur inattendue s'est produite.");
