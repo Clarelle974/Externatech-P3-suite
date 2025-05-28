@@ -33,9 +33,10 @@
     justify-content: space-between;
     gap: 2rem;
     margin-bottom: 0;
+    line-height: 2rem;
+    width: 100%;
     & article {
       display: flex;
-      flex-direction: column-reverse;
       gap: 1rem;
     }
   }
@@ -52,6 +53,7 @@
     margin-top: 2rem;
     border: 2px solid var(--tertiary);
     padding: 2rem;
+    width: 100%;
   }
 
   & .actions {

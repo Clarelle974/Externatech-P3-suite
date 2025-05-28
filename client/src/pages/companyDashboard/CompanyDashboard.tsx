@@ -20,9 +20,15 @@ function CompanyDashboard() {
   const validator = useRevalidator();
 
   /***************DYNAMICS DATAS ********************** */
-  const activeOffers = offers.length;
+  const activeOffers =
+    offers.length <= 1
+      ? `${offers.length} offre active`
+      : `${offers.length} offres actives`;
 
-  const activeCandidates = candidatesByCompany.length;
+  const activeCandidates =
+    candidatesByCompany.length <= 1
+      ? `${candidatesByCompany.length} candidature`
+      : `${candidatesByCompany.length} candidatures`;
 
   let countAcceptedApplies = 0;
   for (const apply of candidatesByCompany) {
@@ -30,6 +36,10 @@ function CompanyDashboard() {
       countAcceptedApplies += 1;
     }
   }
+  const acceptedApplies =
+    countAcceptedApplies <= 1
+      ? `${countAcceptedApplies} candidature acceptée`
+      : `${countAcceptedApplies} candidatures acceptées`;
 
   const date = new Date(company.updated_at);
   const formattedDate = new Intl.DateTimeFormat("fr-FR", {
@@ -118,27 +128,18 @@ function CompanyDashboard() {
           <div className="top">
             <article>
               <h3>
-                <a href="#my-offers">Offre(s)</a>
+                <ul className="square-list">
+                  <li>
+                    <a href="#my-offers">{activeOffers}</a>
+                  </li>
+                  <li>
+                    <a href="#my-candidates">{activeCandidates}</a>
+                  </li>
+                  <li>
+                    <a href="#my-candidates">{acceptedApplies}</a>
+                  </li>
+                </ul>
               </h3>
-              <ul className="square-list">
-                <li>{activeOffers}</li>
-              </ul>
-            </article>
-            <article>
-              <h3>
-                <a href="#my-candidates">Candidature(s)</a>
-              </h3>
-              <ul className="square-list">
-                <li>{activeCandidates}</li>
-              </ul>
-            </article>
-            <article>
-              <h3>
-                <a href="#my-candidates"> Candidature(s) acceptée(s)</a>
-              </h3>
-              <ul className="square-list">
-                <li>{countAcceptedApplies} </li>
-              </ul>
             </article>
           </div>
           <Link
