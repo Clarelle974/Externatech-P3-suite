@@ -19,7 +19,7 @@ function CompanyDashboard() {
 
   const validator = useRevalidator();
 
-  /***************DYNAMICS DATAS ********************** */
+  /***************DISPLAY DYNAMICS DATAS ********************** */
   const activeOffers =
     offers.length <= 1
       ? `${offers.length} offre active`
@@ -155,7 +155,7 @@ function CompanyDashboard() {
           </Link>
         </section>
         <section className="display">
-          <h2>
+          <h2 id="my-offers">
             Mes <strong> OFFRES</strong>
           </h2>
           <div className="gradientBar" />
@@ -179,7 +179,7 @@ function CompanyDashboard() {
             )}
           </ul>
 
-          <h2>
+          <h2 id="my-candidates">
             Mes <strong>CANDIDATS</strong>
           </h2>
           <div className="gradientBar" />
